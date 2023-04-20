@@ -5,12 +5,8 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.StringJoiner;
 
-enum StitchType {
-    PURL,
-    KNIT
-}
 public class Stitch {
-    private StitchType type;
+    private final StitchType type;
     private int orderId;
     private Stitch predecessor;
 

@@ -1,5 +1,6 @@
 plugins {
     id 'application'
+    id 'org.javacc.plugin.javacc-gradle' version '3.0.0'
 }
 apply plugin : "java"
 ext {
@@ -15,6 +16,19 @@ version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
+}
+
+compileJavacc {
+    inputDirectory = file('src/main/java/dev/ryanramsdell/javacc')
+    outputDirectory = file(project.buildDir.absolutePath + '/generated/javacc')
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir "${buildDir}/generated/javacc"
+        }
+    }
 }
 
 dependencies {

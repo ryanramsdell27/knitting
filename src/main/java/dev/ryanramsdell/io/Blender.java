@@ -8,6 +8,9 @@ import dev.ryanramsdell.data.Stitch;
 import java.util.ArrayList;
 import java.util.StringJoiner;
 
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
+
 public class Blender {
 
     private static final String[] header = {"import bpy", "vertices=[]", "edges=[]", "faces=[]"};
@@ -19,8 +22,10 @@ public class Blender {
         }
 
         int numLive = pattern.getNumCastOn();
-        double stitchGuage = 1.0;
-        double r = stitchGuage / (2 * Math.sin(Math.PI / numLive));
+        double stitchGauge = 1.0;
+        double r = stitchGauge / (2 * sin(Math.PI / numLive));
+        Point dir = new Point(0, stitchGauge, stitchGauge);
+        Point curr = new Point(0,0,0);
 
         // Read cast on stitches
         ArrayList<Stitch> liveStitches = new ArrayList<>();
@@ -28,11 +33,14 @@ public class Blender {
 
         for(int i = 0; i < numLive; i++) {
             liveStitches.add(current);
-
-            double d = 2 * Math.PI * i / numLive;
-            double x = r * Math.cos(d);
-            double y = r * Math.sin(d);
-            current.setVertex(new Point(x, y, 0));
+            current.setVertex(new Point(curr.x, curr.y, 0));
+            double angle = 2 * Math.PI / numLive;
+            double x = (cos(angle) * dir.x) - (sin(angle) * dir.y);
+            double y = (sin(angle) * dir.x) + (cos(angle) * dir.y);
+            dir.x = x;
+            dir.y = y;
+            curr.x += x;
+            curr.y += y;
             current = current.getSuccessor();
         }
 
@@ -43,8 +51,19 @@ public class Blender {
                 c.add(parent.getVertex());
             }
             c.scale(1.0/current.getParents().size());
-            c.z += stitchGuage;
-            current.setVertex(c);
+            c.z += stitchGauge;
+            current.setVertex(new Point(curr.x, curr.y, c.z));
+
+            numLive -= current.getParents().size() - 1;
+
+            double angle = 2 * Math.PI / numLive;
+            double x = (cos(angle) * dir.x) - (sin(angle) * dir.y);
+            double y = (sin(angle) * dir.x) + (cos(angle) * dir.y);
+            dir.x = x;
+            dir.y = y;
+            curr.x += x;
+            curr.y += y;
+
             current = current.getSuccessor();
         }
 

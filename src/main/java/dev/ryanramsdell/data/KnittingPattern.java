@@ -77,6 +77,26 @@ public class KnittingPattern {
         return last;
     }
 
+    public void decrease(StitchType type, int num) {
+        Set<Stitch> parents = new HashSet<>();
+        Stitch st = new Stitch(type, start, null, count++);
+        for(int i = 0; i < num; i++) {
+            parents.add(liveStart);
+            liveStart.setChildren(Set.of(st));
+            liveStart = liveStart.getSuccessor();
+        }
+        st.setParents(parents);
+        last.setSuccessor(st);
+        st.setPredecessor(last);
+        last = st;
+        stitches.add(st);
+        liveEnd = st;
+    }
+
+    public void k2tog() {
+        decrease(StitchType.KNIT, 2);
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

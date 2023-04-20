@@ -1,0 +1,75 @@
+options {
+    STATIC = false;
+}
+
+PARSER_BEGIN(Knit)
+package org.javacc.generated;
+
+import dev.ryanramsdell.data.KnittingPattern;public class Knit {
+    public static void main(String[] args) throws ParseException {
+        Knit parser = new Knit(System.in);
+        parser.Start();
+    }
+}
+PARSER_END(Knit)
+
+SKIP : { " " }
+SKIP : { "\n" | "\r" | "\r\n" }
+TOKEN : { < NUMBER : (["0"-"9"])+ > }
+TOKEN : { < CAST_ON : "cast on" | "co" | "caston">}
+TOKEN : { < KNIT : "knit" | "k" >}
+TOKEN : { < PURL : "purl" | "p" >}
+//TOKEN : { < OPEN_PAR : "(" > }
+//TOKEN : { < CLOSE_PAR : ")" > }
+
+void Start() :
+{
+    KnittingPattern pattern;
+    Token castOn;
+}
+{
+    {System.out.println("Running Parser...");}
+    <CAST_ON>castOn=<NUMBER>
+    {
+        int i = Integer.parseInt(castOn.image);
+        pattern = new KnittingPattern(i);
+    }
+    (Stitch(pattern)) *
+    <EOF>
+    {
+        System.out.println("Done parsing");
+        System.out.print(pattern);
+    }
+}
+
+void Stitch(KnittingPattern pattern) :
+{
+    Token stitchType;
+    Token num = null;
+}
+{
+    (stitchType = <CAST_ON> | stitchType = <KNIT> | stitchType = <PURL>)
+    [num = <NUMBER>]
+    {
+        String t;
+        int n = num != null ? Integer.parseInt(num.image) : 1;
+        switch (stitchType.kind) {
+            case CAST_ON:
+                t = "Cast on";
+                pattern.castOn(n);
+                break;
+            case KNIT:
+                t = "Knit";
+                pattern.knit(n);
+                break;
+            case PURL:
+                t = "Purl";
+                pattern.purl(n);
+                break;
+            default:
+                t = "";
+        }
+        System.out.println( t + " " + n);
+    }
+}
+
