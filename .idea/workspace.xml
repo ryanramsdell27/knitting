@@ -5,18 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0ad0be6e-a528-42ee-aee2-a9e35c41864f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/dev/ryanramsdell/data/StitchType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/dev/ryanramsdell/javacc/knit.jj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/dev/ryanramsdell/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dev/ryanramsdell/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dev/ryanramsdell/data/KnittingPattern.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dev/ryanramsdell/data/KnittingPattern.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dev/ryanramsdell/data/Stitch.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dev/ryanramsdell/data/Stitch.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dev/ryanramsdell/io/Blender.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dev/ryanramsdell/io/Blender.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dev/ryanramsdell/io/Deserializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dev/ryanramsdell/io/Deserializer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/dev/ryanramsdell/javacc/knit.jj" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dev/ryanramsdell/javacc/knit.jj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -244,11 +235,6 @@
           <properties class="org.gradle.api.tasks.TaskExecutionException" package="org.gradle.api.tasks" />
           <option name="timeStamp" value="2" />
         </breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/dev/ryanramsdell/io/Deserializer.java</url>
-          <line>37</line>
-          <option name="timeStamp" value="10" />
-        </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/dev/ryanramsdell/io/Blender.java</url>
           <line>85</line>
