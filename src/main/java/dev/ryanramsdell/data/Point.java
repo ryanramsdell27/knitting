@@ -27,4 +27,7 @@ public class Point {
     public String toString() {
         return  String.format("(%f, %f, %f)", x, y, z);
     }
+    public String toStringSquare() {
+        return  String.format("[%f, %f, %f]", x, y, z);
+    }
 }

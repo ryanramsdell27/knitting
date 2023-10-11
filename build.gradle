@@ -23,6 +23,12 @@ compileJavacc {
     outputDirectory = file(project.buildDir.absolutePath + '/generated/javacc')
 }
 
+compileJjtree {
+    inputDirectory = file('src/main/java/dev/ryanramsdell/jjtree')
+    outputDirectory = file(project.buildDir.absolutePath + '/generated/jjtree')
+//    arguments = [grammar_encoding: 'UTF-8', static: 'false']
+}
+
 sourceSets {
     main {
         java {
@@ -34,6 +40,7 @@ sourceSets {
 dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    implementation fileTree(dir: 'lib', include:  '*.jar')
 }
 
 test {

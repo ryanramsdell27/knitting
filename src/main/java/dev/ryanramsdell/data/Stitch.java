@@ -64,6 +64,10 @@ public class Stitch {
         this.children = children;
     }
 
+    public Set<Stitch> getChildren() {
+        return this.children;
+    }
+
     public void setVertex(Point vertex) {
         this.vertex = vertex;
     }

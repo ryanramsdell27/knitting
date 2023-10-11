@@ -1,9 +1,6 @@
 package dev.ryanramsdell.io;
 
-import dev.ryanramsdell.data.Edge;
-import dev.ryanramsdell.data.KnittingPattern;
-import dev.ryanramsdell.data.Point;
-import dev.ryanramsdell.data.Stitch;
+import dev.ryanramsdell.data.*;
 
 import java.util.ArrayList;
 import java.util.StringJoiner;
@@ -21,6 +18,22 @@ public class Blender {
             program.add(line);
         }
 
+        MeshData md = computeVerticesAndEdges(pattern);
+
+
+        program.add(String.format("vertices=%s", md.getVertices()));
+        program.add(String.format("edges=%s", md.getEdges()));
+        program.add("new_mesh = bpy.data.meshes.new('new_mesh')");
+        program.add("new_mesh.from_pydata(vertices, edges, faces)");
+        program.add("new_mesh.update()");
+        program.add("new_object = bpy.data.objects.new('new_object', new_mesh)");
+        program.add("new_collection = bpy.data.collections.new('new_collection')");
+        program.add("bpy.context.scene.collection.children.link(new_collection)");
+        program.add("new_collection.objects.link(new_object)");
+        return program.toString();
+    }
+
+    public static MeshData computeVerticesAndEdges(KnittingPattern pattern) {
         int numLive = pattern.getNumCastOn();
         double stitchGauge = 1.0;
         double r = stitchGauge / (2 * sin(Math.PI / numLive));
@@ -73,16 +86,6 @@ public class Blender {
             vertices.add(stitch.getOrderId(), stitch.getVertex());
             edges.addAll(Edge.generateEdges(stitch));
         }
-
-        program.add(String.format("vertices=%s", vertices));
-        program.add(String.format("edges=%s", edges));
-        program.add("new_mesh = bpy.data.meshes.new('new_mesh')");
-        program.add("new_mesh.from_pydata(vertices, edges, faces)");
-        program.add("new_mesh.update()");
-        program.add("new_object = bpy.data.objects.new('new_object', new_mesh)");
-        program.add("new_collection = bpy.data.collections.new('new_collection')");
-        program.add("bpy.context.scene.collection.children.link(new_collection)");
-        program.add("new_collection.objects.link(new_object)");
-        return program.toString();
+        return new MeshData(vertices, edges);
     }
 }
