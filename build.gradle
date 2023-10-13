@@ -21,18 +21,21 @@ repositories {
 compileJavacc {
     inputDirectory = file('src/main/java/dev/ryanramsdell/javacc')
     outputDirectory = file(project.buildDir.absolutePath + '/generated/javacc')
+//    include '**/*.java'
 }
 
 compileJjtree {
     inputDirectory = file('src/main/java/dev/ryanramsdell/jjtree')
     outputDirectory = file(project.buildDir.absolutePath + '/generated/jjtree')
+//    include '**/*.java'
 //    arguments = [grammar_encoding: 'UTF-8', static: 'false']
 }
 
 sourceSets {
     main {
         java {
-            srcDir "${buildDir}/generated/javacc"
+            srcDir "${buildDir}/generated/"
+//            srcDir "${buildDir}/generated/jjtree"
         }
     }
 }

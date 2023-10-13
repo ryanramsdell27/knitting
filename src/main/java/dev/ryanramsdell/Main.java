@@ -1,40 +1,31 @@
 package dev.ryanramsdell;
 
 import dev.ryanramsdell.data.KnittingPattern;
-import dev.ryanramsdell.data.MeshData;
-import dev.ryanramsdell.data.Point;
-import dev.ryanramsdell.io.Blender;
-import org.javacc.generated.Knit;
+import dev.ryanramsdell.interpreter.TreeInterpreter;
+import dev.ryanramsdell.io.NumpyWriter;
+import dev.ryanramsdell.jjtree.Knit;
+import dev.ryanramsdell.jjtree.SimpleNode;
 
-import java.io.*;
-import java.util.Arrays;
+import java.io.Reader;
+import java.io.StringReader;
 
 public class Main {
     public static void main(String[] args) {
         KnittingPattern pattern;
-        Reader reader = new StringReader("co20k6p2 knit2 k2tog p2k2pkpk k2tog k4 k2tog k2 k2tog k6 p3 k2tog k3 k2tog k3 k2tog k3 k2tog k3 k7");//  (k6k2tog)3"); //"co8k6p2 knit2 p2k2pkpk"
+        Reader reader = new StringReader("co22 (k2p2(k2)2k2tog)10");
         Knit knit = new Knit(reader);
-        try{
-            pattern = knit.Start();
-            double[][] diss = pattern.computeDissimilarity();
-            StringBuilder sb = new StringBuilder("import numpy as np\n");
-            sb.append("stitches = np.array(");
-            sb.append(Arrays.deepToString(diss).replace("], ", "],\n"));
 
-            MeshData md = Blender.computeVerticesAndEdges(pattern);
-            sb.append(")\ninitial = np.array([");
-            for(Point vert : md.getVertices()) {
-                sb.append(vert.toStringSquare());
-                sb.append(',');
-            }
-            sb.append("])");
-            System.out.println(sb);
-            try (Writer writer = new BufferedWriter(new OutputStreamWriter(
-                    new FileOutputStream("mds/out.py"), "utf-8"))) {
-                writer.write(sb.toString());
-            }
+        try{
+            SimpleNode node = knit.Start();
+            node.dump("");
+            TreeInterpreter interpreter = new TreeInterpreter(node);
+            pattern = interpreter.interpret();
+
+            NumpyWriter numpyWriter = new NumpyWriter(pattern);
+            numpyWriter.writeToFile("out.py");
+
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
     }
 }

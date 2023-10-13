@@ -1,13 +1,13 @@
 options {
     STATIC = false;
-//    LOOKAHEAD = 5;
-//    FORCE_LA_CHECK = true;
+    MULTI = true;
+    KEEP_LINE_COLUMN = true;
 }
 
 PARSER_BEGIN(Knit)
-package org.javacc.generated;
+package dev.ryanramsdell.jjtree;
 
-import dev.ryanramsdell.data.KnittingPattern;import dev.ryanramsdell.data.StitchType;import java.util.regex.Pattern;public class Knit {
+import dev.ryanramsdell.data.KnittingPattern;import dev.ryanramsdell.data.StitchType;public class Knit {
     public static void main(String[] args) throws ParseException {
         Knit parser = new Knit(System.in);
         parser.Start();
@@ -24,39 +24,43 @@ TOKEN : { < PURL : "purl" | "p" >}
 TOKEN : { < TOG : "together" | "tog" > }
 //TOKEN : { < CABLE : "cable" | "c" > }
 //TOKEN : { < MAKE : "make" | "m" > }
-//TOKEN : { < OPEN_PAR : "(" > }
-//TOKEN : { < CLOSE_PAR : ")" > }
+TOKEN : { < OPEN_PAR : "(" > }
+TOKEN : { < CLOSE_PAR : ")" > }
 
-KnittingPattern Start() :
+SimpleNode Start() :
 {
     KnittingPattern pattern;
     Token castOn;
 }
 {
     {System.out.println("Running Parser...");}
-    pattern = CastOnNew()
-    (LOOKAHEAD((<KNIT>|<PURL>)<NUMBER><TOG>) Decrease(pattern) | Stitch(pattern))*
+    (Exp() ) *
     <EOF>
     {
         System.out.println("Done parsing");
-        System.out.println(pattern);
-        return pattern;
+        return jjtThis;
     }
 
 }
 
-KnittingPattern CastOnNew() :
-{Token castOn;}
+void Exp() #void : {}
 {
-    <CAST_ON>castOn=<NUMBER>
+    Repeat() | LOOKAHEAD((<KNIT>|<PURL>)<NUMBER><TOG>) Decrease() | Stitch()
+}
+
+void Repeat() :
+{
+    Token num;
+}
+{
+    <OPEN_PAR> (Exp()) * <CLOSE_PAR>num=<NUMBER>
     {
-        int i = Integer.parseInt(castOn.image);
-        System.out.println( "Cast on " + i);
-        return new KnittingPattern(i);
+        int n = Integer.parseInt(num.image);
+        jjtThis.setNum(n);
     }
 }
 
-void Stitch(KnittingPattern pattern) :
+void Stitch() :
 {
     Token stitchType;
     Token num = null;
@@ -65,29 +69,23 @@ void Stitch(KnittingPattern pattern) :
     (stitchType = <CAST_ON> | stitchType = <KNIT> | stitchType = <PURL>)
     [num = <NUMBER>]
     {
-        String t;
         int n = num != null ? Integer.parseInt(num.image) : 1;
         switch (stitchType.kind) {
             case CAST_ON:
-                t = "Cast on";
-                pattern.castOn(n);
+                jjtThis.setType(StitchType.CAST_ON);
                 break;
             case KNIT:
-                t = "Knit";
-                pattern.knit(n);
+                jjtThis.setType(StitchType.KNIT);
                 break;
             case PURL:
-                t = "Purl";
-                pattern.purl(n);
+                jjtThis.setType(StitchType.PURL);
                 break;
-            default:
-                t = "";
         }
-        System.out.println( t + " " + n);
+        jjtThis.setNum(n);
     }
 }
 
-void Decrease(KnittingPattern pattern) :
+void Decrease() :
 {
     Token stitchType;
     Token count;
@@ -98,12 +96,13 @@ void Decrease(KnittingPattern pattern) :
     <TOG>
     {
         int c = Integer.parseInt(count.image);
+        jjtThis.setNum(c);
         switch(stitchType.kind) {
             case KNIT:
-                pattern.decrease(StitchType.KNIT, c);
+                jjtThis.setType(StitchType.KNIT);
                 break;
             case PURL:
-                pattern.decrease(StitchType.PURL, c);
+                jjtThis.setType(StitchType.PURL);
                 break;
         }
     }

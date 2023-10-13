@@ -54,7 +54,6 @@ public class KnittingPattern {
         st.setPredecessor(last);
         last = st;
         stitches.add(st);
-//        st.setParents(Set.of(liveStart));
         liveStart.setChildren(new HashSet<>(Set.of(st)));
         liveStart = liveStart.getSuccessor();
         liveEnd = st;
@@ -124,11 +123,6 @@ public class KnittingPattern {
 
     private double[][] computeDissImmediateNeighbor() {
         double[][] out = new double [count][count];
-//        for( int i = 0; i < out[0].length; i++){
-//            for(int j = 0; j < out[0].length; j++){
-//                out[i][j] = 10000;
-//            }
-//        }
         for(Stitch stitch : stitches) {
             Stitch pred = stitch.getPredecessor();
             Stitch succ = stitch.getSuccessor();
@@ -150,7 +144,6 @@ public class KnittingPattern {
         LinkedList<BfsItem> queue = new LinkedList<>();
 
         queue.add(new BfsItem(stitch, 0));
-//        dis[stitch.getOrderId()] = 0.1;
         while(queue.size() > 0) {
             BfsItem bs = queue.removeFirst();
             Stitch s = bs.stitch;
@@ -176,16 +169,12 @@ public class KnittingPattern {
             }
 
         }
-//        System.out.println(stitch.getOrderId() + " " + Arrays.toString(Arrays.stream(dis).toArray()));
     }
     private double[][] computeDissBFS() {
         double[][] out = new double [count][count];
         for(Stitch stitch : stitches) {
             double[] dis = new double[count];
             BFS(stitch, dis, 2);
-//            for(int i = 0; i < count; i++){
-//                out[stitch.getOrderId()][i] = dis[i];
-//            }
             out[stitch.getOrderId()] = dis;
             out[stitch.getOrderId()][stitch.getOrderId()] = 0.001;
         }
@@ -195,7 +184,6 @@ public class KnittingPattern {
     public double[][] computeDissimilarity() {
 //        double[][] out = computeDissImmediateNeighbor();
         double[][] out = computeDissBFS();
-//        System.out.println(Arrays.deepToString(out).replace("], ", "],\n"));
         return out;
     }
 
