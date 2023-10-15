@@ -12,7 +12,7 @@ import java.io.StringReader;
 public class Main {
     public static void main(String[] args) {
         KnittingPattern pattern;
-        Reader reader = new StringReader("co22 (k2p2(k2)2k2tog)10");
+        Reader reader = new StringReader("co4 (k3 m1)10 (k2tog k3 k2tog)6");
         Knit knit = new Knit(reader);
 
         try{

@@ -93,6 +93,26 @@ public class KnittingPattern {
         liveEnd = st;
     }
 
+    public void increase(StitchType type, int num) {
+        Set<Stitch> parents = new HashSet<>(Set.of(liveStart));
+        Set<Stitch> children = new HashSet<>();
+        for(int i = 0; i < num + 1; i++){
+            Stitch st = new Stitch(type, start, parents, count++);
+            last.setSuccessor(st);
+            st.setPredecessor(last);
+            last = st;
+            stitches.add(st);
+            children.add(st);
+        }
+
+        liveStart.setChildren(children);
+        liveStart = liveStart.getSuccessor();
+//        for(int i = 0; i < num; i++) {
+//            liveStart = liveStart.getSuccessor();
+//        }
+        liveEnd = last;
+    }
+
     public void k2tog() {
         decrease(StitchType.KNIT, 2);
     }

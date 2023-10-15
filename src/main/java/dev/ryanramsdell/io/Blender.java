@@ -67,6 +67,7 @@ public class Blender {
             c.z += stitchGauge;
             current.setVertex(new Point(curr.x, curr.y, c.z));
 
+            if(current.getParents() != null && current.getPredecessor() != null && current.getPredecessor().getParents()!= null && current.getParents().containsAll(current.getPredecessor().getParents())) numLive++;
             numLive -= current.getParents().size() - 1;
 
             double angle = 2 * Math.PI / numLive;

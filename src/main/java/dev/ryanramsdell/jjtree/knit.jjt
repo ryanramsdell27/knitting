@@ -20,10 +20,14 @@ SKIP : { "\n" | "\r" | "\r\n" }
 TOKEN : { < NUMBER : (["0"-"9"])+ > }
 TOKEN : { < CAST_ON : "cast on" | "co" | "caston">}
 TOKEN : { < KNIT : "knit" | "k" >}
+TOKEN : { < KNITWISE : <KNIT> | "knitwise" >}
 TOKEN : { < PURL : "purl" | "p" >}
+TOKEN : { < PURLWISE : <PURL> | "purlwise" >}
 TOKEN : { < TOG : "together" | "tog" > }
 //TOKEN : { < CABLE : "cable" | "c" > }
-//TOKEN : { < MAKE : "make" | "m" > }
+TOKEN : { < MAKE : "make" | "m" > }
+TOKEN : { < LEFT : "left" | "l" > }
+TOKEN : { < RIGHT : "right" | "r" > }
 TOKEN : { < OPEN_PAR : "(" > }
 TOKEN : { < CLOSE_PAR : ")" > }
 
@@ -45,7 +49,7 @@ SimpleNode Start() :
 
 void Exp() #void : {}
 {
-    Repeat() | LOOKAHEAD((<KNIT>|<PURL>)<NUMBER><TOG>) Decrease() | Stitch()
+    Repeat() | LOOKAHEAD((<KNIT>|<PURL>)<NUMBER><TOG>) Decrease() | Increase() | Stitch()
 }
 
 void Repeat() :
@@ -104,6 +108,29 @@ void Decrease() :
             case PURL:
                 jjtThis.setType(StitchType.PURL);
                 break;
+        }
+    }
+}
+
+void Increase() :
+{
+    Token stitchType = null;
+    Token count;
+    Token lean;
+}
+{
+    <MAKE>
+    count = <NUMBER>
+    [(stitchType = <KNITWISE> | stitchType = <PURLWISE>)]
+    [lean = <LEFT> | <RIGHT> ]
+    {
+        int c = Integer.parseInt(count.image);
+        jjtThis.setNum(c);
+        if(stitchType != null && stitchType.kind == PURLWISE) {
+            jjtThis.setType(StitchType.PURL);
+        }
+        else {
+            jjtThis.setType(StitchType.KNIT);
         }
     }
 }

@@ -41,6 +41,9 @@ public class TreeInterpreter {
         } else if (node.getClass().equals(ASTDecrease.class)) {
             ASTDecrease decrease = (ASTDecrease) node;
             pattern.decrease(decrease.getType(), decrease.getNum());
+        } else if (node.getClass().equals(ASTIncrease.class)) {
+            ASTIncrease increase = (ASTIncrease) node;
+            pattern.increase(increase.getType(), increase.getNum());
         }
     }
 
