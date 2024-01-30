@@ -1,4 +1,4 @@
-package dev.ryanramsdell.data;
+package dev.ryanramsdell.enums;
 
 public enum StitchType {
     PURL,

@@ -1,10 +1,18 @@
 package dev.ryanramsdell.data;
 
+import dev.ryanramsdell.enums.DissimilarityAlgorithm;
+import dev.ryanramsdell.enums.StitchType;
 import dev.ryanramsdell.io.MDS;
 
 import java.util.*;
 
-public class KnittingPattern {
+/**
+ * Implementation of the KPattern interface
+ * Structure of a knitted object is stored as a set of Stitches
+ * Knitting operations defined by KPattern interface determine how this
+ * set is constructed and modified
+ */
+public class KnittingPattern implements KPattern {
     private int count;
     private Stitch start;
     private Stitch last;
@@ -13,40 +21,24 @@ public class KnittingPattern {
     private int numCastOn;
     private Set<Stitch> stitches;
 
-    public KnittingPattern(int numStitches) {
-        count = 0;
-        start = new Stitch(count++);
-        liveStart = start;
-        last = start;
-        stitches = new HashSet<>();
-        stitches.add(start);
-        castOn(numStitches - 1);
-        numCastOn = numStitches;
-    }
 
-    public Stitch knit(int numStitches) {
-        if(numStitches <= 0) return start;
-        for(int i = 0; i < numStitches; i++) {
-            knit();
-        }
-        return last;
+    /**
+     * Casts on numStitches. This class implicitly joins in the round
+     * @param numStitches Number of stitches to cast on
+     * @param join Whether to join in the round
+     */
+    @Override
+    public void init(int numStitches, boolean join) {
+        this.count = 0;
+        this.start = new Stitch(this.count++);
+        this.liveStart = this.start;
+        this.last = this.start;
+        this.stitches = new HashSet<>();
+        this.stitches.add(this.start);
+        this.castOn(numStitches - 1);
+        this.numCastOn = numStitches;
     }
-    public Stitch knit() {
-        return basicStitch(StitchType.KNIT);
-    }
-
-    public Stitch purl(int numStitches) {
-        if(numStitches <= 0) return start;
-        for(int i = 0; i < numStitches; i++) {
-            purl();
-        }
-        return last;
-    }
-
-    public Stitch purl() {
-        return basicStitch(StitchType.PURL);
-    }
-
+    @Override
     public Stitch basicStitch(StitchType type) {
         Set<Stitch> parents = new HashSet<>(Set.of(liveStart));
         Stitch st = new Stitch(type, start, parents, count++);
@@ -60,14 +52,14 @@ public class KnittingPattern {
         return last;
     }
 
-    public Stitch castOn(int numStitches) {
+    private Stitch castOn(int numStitches) {
         if(numStitches <= 0) return start;
         for(int i = 0; i < numStitches; i++) {
             castOn();
         }
         return last;
     }
-    public Stitch castOn() {
+    private Stitch castOn() {
         Stitch st = new Stitch(StitchType.KNIT, start, null, count++);
         last.setSuccessor(st);
         st.setPredecessor(last);
@@ -76,7 +68,7 @@ public class KnittingPattern {
         liveEnd = st;
         return last;
     }
-
+    @Override
     public void decrease(StitchType type, int num) {
         Set<Stitch> parents = new HashSet<>();
         Stitch st = new Stitch(type, start, null, count++);
@@ -92,7 +84,7 @@ public class KnittingPattern {
         stitches.add(st);
         liveEnd = st;
     }
-
+    @Override
     public void increase(StitchType type, int num) {
         Set<Stitch> parents = new HashSet<>(Set.of(liveStart));
         Set<Stitch> children = new HashSet<>();
@@ -107,14 +99,7 @@ public class KnittingPattern {
 
         liveStart.setChildren(children);
         liveStart = liveStart.getSuccessor();
-//        for(int i = 0; i < num; i++) {
-//            liveStart = liveStart.getSuccessor();
-//        }
         liveEnd = last;
-    }
-
-    public void k2tog() {
-        decrease(StitchType.KNIT, 2);
     }
 
     @Override
@@ -201,13 +186,18 @@ public class KnittingPattern {
         return out;
     }
 
-    public double[][] computeDissimilarity() {
-//        double[][] out = computeDissImmediateNeighbor();
-        double[][] out = computeDissBFS();
-        return out;
+
+    public double[][] computeDissimilarity(DissimilarityAlgorithm algorithm) {
+        switch (algorithm) {
+            case IMMEDIATE_NEIGHBOR:
+                return computeDissImmediateNeighbor();
+            case DISS_BFS:
+            default:
+                return computeDissBFS();
+        }
     }
 
     public double[][] computeMDS() {
-        return MDS.computeMDS(computeDissimilarity());
+        return MDS.computeMDS(computeDissimilarity(DissimilarityAlgorithm.DEFAULT));
     }
 }

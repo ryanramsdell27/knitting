@@ -1,5 +1,7 @@
 package dev.ryanramsdell.data;
 
+import dev.ryanramsdell.enums.StitchType;
+
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Set;

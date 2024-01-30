@@ -3,6 +3,7 @@ package dev.ryanramsdell.io;
 import dev.ryanramsdell.data.KnittingPattern;
 import dev.ryanramsdell.data.MeshData;
 import dev.ryanramsdell.data.Point;
+import dev.ryanramsdell.enums.DissimilarityAlgorithm;
 
 import java.io.*;
 import java.util.Arrays;
@@ -13,7 +14,7 @@ public class NumpyWriter {
         this.pattern = pattern;
     }
     public void writeToFile(String filename) {
-        double[][] diss = pattern.computeDissimilarity();
+        double[][] diss = pattern.computeDissimilarity(DissimilarityAlgorithm.DISS_BFS);
         StringBuilder sb = new StringBuilder("import numpy as np\n");
         sb.append("stitches = np.array(");
         sb.append(Arrays.deepToString(diss).replace("], ", "],\n"));

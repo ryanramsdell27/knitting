@@ -2,7 +2,7 @@
 /* JavaCCOptions:MULTI=true,NODE_USES_PARSER=false,VISITOR=false,TRACK_TOKENS=false,NODE_PREFIX=AST,NODE_EXTENDS=,NODE_FACTORY=,SUPPORT_CLASS_VISIBILITY_PUBLIC=true */
 package dev.ryanramsdell.jjtree;
 
-import dev.ryanramsdell.data.StitchType;
+import dev.ryanramsdell.enums.StitchType;
 
 public
 class ASTIncrease extends dev.ryanramsdell.jjtree.SimpleNode {

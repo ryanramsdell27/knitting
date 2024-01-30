@@ -1,6 +1,6 @@
 package dev.ryanramsdell.jjtree;
 
-import dev.ryanramsdell.data.StitchType;
+import dev.ryanramsdell.enums.StitchType;
 
 public
 class ASTStitch extends dev.ryanramsdell.jjtree.SimpleNode {
