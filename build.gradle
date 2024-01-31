@@ -1,6 +1,6 @@
 plugins {
     id 'application'
-    id 'org.javacc.plugin.javacc-gradle' version '3.0.0'
+    id 'org.javacc.javacc' version '3.0.2'
 }
 apply plugin : "java"
 ext {
@@ -8,7 +8,7 @@ ext {
 }
 
 application {
-    mainClassName = javaMainClass
+    mainClass = javaMainClass
 }
 
 group 'dev.ryanramsdell'

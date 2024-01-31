@@ -35,7 +35,7 @@ public class YardageEstimator implements KPattern{
 
     @Override
     public void decrease(StitchType type, int num) {
-        basicStitch(type, num);
+        basicStitch(type, 1);
     }
 
     @Override
