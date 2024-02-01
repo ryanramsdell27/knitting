@@ -1,7 +1,8 @@
-package dev.ryanramsdell.data;
+package dev.ryanramsdell.patterns;
 
-import dev.ryanramsdell.enums.DissimilarityAlgorithm;
-import dev.ryanramsdell.enums.StitchType;
+import dev.ryanramsdell.data.BfsItem;
+import dev.ryanramsdell.data.Stitch;
+import dev.ryanramsdell.enums.*;
 import dev.ryanramsdell.io.MDS;
 
 import java.util.*;
@@ -69,7 +70,7 @@ public class KnittingPattern implements KPattern {
         return last;
     }
     @Override
-    public void decrease(StitchType type, int num) {
+    public void decrease(StitchType type, int num, DecreaseType decreaseType) {
         Set<Stitch> parents = new HashSet<>();
         Stitch st = new Stitch(type, start, null, count++);
         for(int i = 0; i < num; i++) {
@@ -85,7 +86,7 @@ public class KnittingPattern implements KPattern {
         liveEnd = st;
     }
     @Override
-    public void increase(StitchType type, int num) {
+    public void increase(StitchType type, int num, IncreaseType increaseType) {
         Set<Stitch> parents = new HashSet<>(Set.of(liveStart));
         Set<Stitch> children = new HashSet<>();
         for(int i = 0; i < num + 1; i++){

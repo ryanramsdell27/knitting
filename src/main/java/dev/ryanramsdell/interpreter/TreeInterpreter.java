@@ -1,6 +1,6 @@
 package dev.ryanramsdell.interpreter;
 
-import dev.ryanramsdell.data.KPattern;
+import dev.ryanramsdell.patterns.KPattern;
 import dev.ryanramsdell.enums.StitchType;
 import dev.ryanramsdell.jjtree.*;
 import dev.ryanramsdell.jjtree.Node;
@@ -60,10 +60,10 @@ public class TreeInterpreter<T extends KPattern> {
             }
         } else if (node.getClass().equals(ASTDecrease.class)) {
             ASTDecrease decrease = (ASTDecrease) node;
-            pattern.decrease(decrease.getType(), decrease.getNum());
+            pattern.decrease(decrease.getType(), decrease.getNum(), decrease.getDecreaseType());
         } else if (node.getClass().equals(ASTIncrease.class)) {
             ASTIncrease increase = (ASTIncrease) node;
-            pattern.increase(increase.getType(), increase.getNum());
+            pattern.increase(increase.getType(), increase.getNum(), increase.getIncreaseType());
         }
     }
 

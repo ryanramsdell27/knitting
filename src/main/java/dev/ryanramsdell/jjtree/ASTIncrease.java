@@ -3,14 +3,14 @@
 package dev.ryanramsdell.jjtree;
 
 import dev.ryanramsdell.enums.StitchType;
+import dev.ryanramsdell.enums.IncreaseType;
 
 public
 class ASTIncrease extends dev.ryanramsdell.jjtree.SimpleNode {
-  static enum Lean {LEFT, RIGHT};
   private StitchType type;
   private int num;
 
-  private Lean lean;
+  private IncreaseType increaseType;
   public ASTIncrease(int id) {
     super(id);
   }
@@ -25,8 +25,8 @@ class ASTIncrease extends dev.ryanramsdell.jjtree.SimpleNode {
   public void setNum(int num) {
     this.num = num;
   }
-  public void setLean(Lean lean) {
-    this.lean = lean;
+  public void setIncreaseType(IncreaseType type) {
+    this.increaseType = type;
   }
 
   public StitchType getType() {
@@ -36,12 +36,12 @@ class ASTIncrease extends dev.ryanramsdell.jjtree.SimpleNode {
   public int getNum() {
     return num;
   }
-  public Lean getLean() {
-    return lean;
+  public IncreaseType getIncreaseType() {
+    return this.increaseType;
   }
 
   public String toString() {
-    return "Increase " + this.type + " " + this.num;
+    return "Increase " + this.type + " " + this.num + " " + this.increaseType;
   }
 
 }

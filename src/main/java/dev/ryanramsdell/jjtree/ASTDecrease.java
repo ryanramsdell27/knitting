@@ -3,11 +3,13 @@
 package dev.ryanramsdell.jjtree;
 
 import dev.ryanramsdell.enums.StitchType;
+import dev.ryanramsdell.enums.DecreaseType;
 
 public
 class ASTDecrease extends dev.ryanramsdell.jjtree.SimpleNode {
   private StitchType type;
   private int num;
+  private DecreaseType decreaseType;
   public ASTDecrease(int id) {
     super(id);
   }
@@ -22,7 +24,9 @@ class ASTDecrease extends dev.ryanramsdell.jjtree.SimpleNode {
   public void setNum(int num) {
     this.num = num;
   }
-
+  public void setDecreaseType(DecreaseType type) {
+    this.decreaseType = type;
+  }
   public StitchType getType() {
     return type;
   }
@@ -31,8 +35,11 @@ class ASTDecrease extends dev.ryanramsdell.jjtree.SimpleNode {
     return num;
   }
 
+  public DecreaseType getDecreaseType() {
+    return this.decreaseType;
+  }
   public String toString() {
-    return "Decrease " + this.type + " " + this.num;
+    return "Decrease " + this.type + " " + this.num + " " + this.decreaseType;
   }
 
 }

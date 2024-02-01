@@ -1,5 +1,8 @@
-package dev.ryanramsdell.data;
+package dev.ryanramsdell.patterns;
 
+import dev.ryanramsdell.data.Stitch;
+import dev.ryanramsdell.enums.DecreaseType;
+import dev.ryanramsdell.enums.IncreaseType;
 import dev.ryanramsdell.enums.StitchType;
 
 /** Knitting pattern API used to represent a knitted object during the
@@ -23,12 +26,12 @@ public interface KPattern {
     /**
      * Perform a single knit stitch
      */
-    void decrease(StitchType type, int num);
+    void decrease(StitchType type, int num, DecreaseType decreaseType);
     /**
      * Perform an increase of num stitches
      * @param type StitchType of the new type
      * @param num number of parent stitches to combine
      */
-    void increase(StitchType type, int num);
+    void increase(StitchType type, int num, IncreaseType increaseType);
 
 }

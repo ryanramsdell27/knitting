@@ -1,6 +1,6 @@
 package dev.ryanramsdell.interpreter;
 
-import dev.ryanramsdell.data.YardageEstimator;
+import dev.ryanramsdell.patterns.YardageEstimator;
 import dev.ryanramsdell.jjtree.Knit;
 import dev.ryanramsdell.jjtree.ParseException;
 import dev.ryanramsdell.jjtree.SimpleNode;
@@ -18,6 +18,13 @@ public class TreeInterpreterTest {
         Reader reader = new StringReader("co40 k10 p5");
         YardageEstimator pattern = getYardageEstimator(reader);
         assertEquals(pattern.getCount(), 55);
+    }
+
+    @Test
+    void countStitchesLinearDecreaseAndIncreases() throws ParseException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        Reader reader = new StringReader("co40 k10 p5 m1 m1:(left) m1:(right) k2tog k2tog:(left) k2tog:(right)");
+        YardageEstimator pattern = getYardageEstimator(reader);
+        assertEquals(pattern.getCount(), 61);
     }
     @Test
     void countStitchesSingleRepeats() throws ParseException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {

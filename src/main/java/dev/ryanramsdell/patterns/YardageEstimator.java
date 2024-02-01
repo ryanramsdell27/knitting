@@ -1,5 +1,8 @@
-package dev.ryanramsdell.data;
+package dev.ryanramsdell.patterns;
 
+import dev.ryanramsdell.data.Stitch;
+import dev.ryanramsdell.enums.DecreaseType;
+import dev.ryanramsdell.enums.IncreaseType;
 import dev.ryanramsdell.enums.StitchType;
 
 public class YardageEstimator implements KPattern{
@@ -34,12 +37,12 @@ public class YardageEstimator implements KPattern{
     }
 
     @Override
-    public void decrease(StitchType type, int num) {
+    public void decrease(StitchType type, int num, DecreaseType decreaseType) {
         basicStitch(type, 1);
     }
 
     @Override
-    public void increase(StitchType type, int num) {
+    public void increase(StitchType type, int num, IncreaseType increaseType) {
         basicStitch(type, num);
     }
 

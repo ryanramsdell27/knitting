@@ -1,6 +1,7 @@
 package dev.ryanramsdell.io;
 
 import dev.ryanramsdell.data.*;
+import dev.ryanramsdell.patterns.KnittingPattern;
 
 import java.util.ArrayList;
 import java.util.StringJoiner;

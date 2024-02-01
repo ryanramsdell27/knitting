@@ -1,6 +1,6 @@
 package dev.ryanramsdell.io;
 
-import dev.ryanramsdell.data.KnittingPattern;
+import dev.ryanramsdell.patterns.KnittingPattern;
 import dev.ryanramsdell.data.MeshData;
 import dev.ryanramsdell.data.Point;
 import dev.ryanramsdell.enums.DissimilarityAlgorithm;

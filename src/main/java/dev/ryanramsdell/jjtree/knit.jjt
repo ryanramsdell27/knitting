@@ -7,10 +7,18 @@ options {
 PARSER_BEGIN(Knit)
 package dev.ryanramsdell.jjtree;
 
-import dev.ryanramsdell.enums.StitchType;public class Knit {
+import dev.ryanramsdell.enums.DecreaseType;
+import dev.ryanramsdell.enums.IncreaseType;
+import dev.ryanramsdell.enums.StitchType;
+public class Knit {
     public static void main(String[] args) throws ParseException {
         Knit parser = new Knit(System.in);
         parser.Start();
+    }
+    public static <E extends Enum<E>> E stripQual(Token qualifier, E defaultVal) {
+        String qual = qualifier != null ? qualifier.image.toUpperCase().substring(2,qualifier.image.length()-1) : null;
+        if(qual != null) return Enum.valueOf(defaultVal.getDeclaringClass(), qual);
+        else return defaultVal;
     }
 }
 PARSER_END(Knit)
@@ -30,6 +38,7 @@ TOKEN : { < LEFT : "left" | "l" > }
 TOKEN : { < RIGHT : "right" | "r" > }
 TOKEN : { < OPEN_PAR : "(" > }
 TOKEN : { < CLOSE_PAR : ")" > }
+TOKEN : { < QUALIFIER : ":" <OPEN_PAR> (["a"-"z","A"-"Z","0"-"9"])+ <CLOSE_PAR> > }
 
 SimpleNode Start() :
 {
@@ -92,14 +101,17 @@ void Decrease() :
 {
     Token stitchType;
     Token count;
+    Token decreaseType = null;
 }
 {
     (stitchType = <KNIT> | stitchType = <PURL> )
     count = <NUMBER>
     <TOG>
+    [decreaseType = <QUALIFIER>]
     {
         int c = Integer.parseInt(count.image);
         jjtThis.setNum(c);
+        jjtThis.setDecreaseType(stripQual(decreaseType, DecreaseType.LEFT));
         switch(stitchType.kind) {
             case KNIT:
                 jjtThis.setType(StitchType.KNIT);
@@ -115,16 +127,17 @@ void Increase() :
 {
     Token stitchType = null;
     Token count;
-    Token lean;
+    Token increaseType = null;
 }
 {
     <MAKE>
     count = <NUMBER>
     [(stitchType = <KNITWISE> | stitchType = <PURLWISE>)]
-    [lean = <LEFT> | <RIGHT> ]
+    [increaseType = <QUALIFIER> ]
     {
         int c = Integer.parseInt(count.image);
         jjtThis.setNum(c);
+        jjtThis.setIncreaseType(stripQual(increaseType, IncreaseType.LEFT));
         if(stitchType != null && stitchType.kind == PURLWISE) {
             jjtThis.setType(StitchType.PURL);
         }
@@ -133,4 +146,3 @@ void Increase() :
         }
     }
 }
-
