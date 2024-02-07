@@ -145,7 +145,6 @@ public class KnittingPattern implements KPattern {
         return out;
     }
 
-
     private void BFS(Stitch stitch, double[] dis, int maxOrder) {
         LinkedList<BfsItem> queue = new LinkedList<>();
 
@@ -158,15 +157,7 @@ public class KnittingPattern implements KPattern {
             }
             else {
                 if (dis[s.getOrderId()] == 0 || dis[s.getOrderId()] > bs.order) dis[s.getOrderId()] = bs.order;
-                Stitch pred = s.getPredecessor();
-                Stitch succ = s.getSuccessor();
-                Set<Stitch> children = s.getChildren();
-                Set<Stitch> parents = s.getParents();
-                Set<Stitch> neighbors = new HashSet<>();
-                if (children != null) neighbors.addAll(children);
-                if (parents != null) neighbors.addAll(parents);
-                if (pred != null) neighbors.add(pred);
-                if (succ != null) neighbors.add(succ);
+                Set<Stitch> neighbors = s.getNeighbors();
                 for (Stitch neighbor : neighbors) {
                     if (dis[neighbor.getOrderId()] == 0 && neighbor != stitch && (bs.order < maxOrder || maxOrder == 0)) {
                         queue.add(new BfsItem(neighbor, bs.order + 1));
@@ -176,26 +167,84 @@ public class KnittingPattern implements KPattern {
 
         }
     }
+
     private double[][] computeDissBFS() {
         double[][] out = new double [count][count];
         for(Stitch stitch : stitches) {
             double[] dis = new double[count];
-            BFS(stitch, dis, 2);
+            BFS(stitch, dis, count);
             out[stitch.getOrderId()] = dis;
-            out[stitch.getOrderId()][stitch.getOrderId()] = 0.001;
+//            out[stitch.getOrderId()][stitch.getOrderId()] = 0.0;
         }
         return out;
     }
 
+    private double[][] computeFloydWarshall() {
+        // Create adjacency matrix
+        double[][] adjacency = new double[count][count];
+        for(double[] arr : adjacency)
+            Arrays.fill(arr, Integer.MAX_VALUE);
+        for(Stitch stitch : stitches) {
+            Set<Stitch> neighbors = stitch.getNeighbors();
+            adjacency[stitch.getOrderId()][stitch.getOrderId()] = 0;
+            for (Stitch neighbor : neighbors) {
+                adjacency[stitch.getOrderId()][neighbor.getOrderId()] = 1;
+            }
+        }
+        // Floyd-Warshall
+        for(int i = 0; i < count; i++) {
+            for(int j = 0; j < count; j++) {
+                for(int k = 0; k < count; k++) {
+                    adjacency[j][k] = Math.min(adjacency[j][k], adjacency[j][i] + adjacency[i][k]);
+                }
+            }
+        }
+        return adjacency;
+    }
+
+    private double[] dijkstra(Stitch start) {
+        double[] distance = new double[count];
+        PriorityQueue<Stitch> queue = new PriorityQueue<>(count, (o1, o2) -> (int) (distance[o1.getOrderId()] - distance[o2.getOrderId()]));
+        for(Stitch stitch : stitches) {
+            if(stitch.equals(start)) distance[stitch.getOrderId()] = 0.0;
+            else distance[stitch.getOrderId()] = Double.MAX_VALUE;
+            queue.add(stitch);
+        }
+
+        while(!queue.isEmpty()) {
+            Stitch next = queue.poll();
+            for(Stitch stitch : next.getNeighbors()) {
+                if(queue.contains(stitch)) {
+                    double alt = distance[next.getOrderId()] + 1;
+                    if(distance[stitch.getOrderId()] > alt) {
+                        distance[stitch.getOrderId()] = alt;
+                        // Force re-prioritization in queue
+                        queue.remove(stitch);
+                        queue.add(stitch);
+                    }
+                }
+            }
+        }
+        return distance;
+    }
+
+    private double[][] computeDijkstras() {
+        double[][] out = new double[count][count];
+        for(Stitch stitch : stitches) {
+            out[stitch.getOrderId()] = dijkstra(stitch);
+        }
+        return out;
+    }
 
     public double[][] computeDissimilarity(DissimilarityAlgorithm algorithm) {
-        switch (algorithm) {
-            case IMMEDIATE_NEIGHBOR:
-                return computeDissImmediateNeighbor();
-            case DISS_BFS:
-            default:
-                return computeDissBFS();
-        }
+        double[][] out = switch (algorithm) {
+            case IMMEDIATE_NEIGHBOR -> computeDissImmediateNeighbor();
+            case FLOYD_WARSHALL -> computeFloydWarshall();
+            case DIJKSTRAS, DEFAULT -> computeDijkstras();
+            case DISS_BFS -> computeDissBFS();
+        };
+//        System.out.println(Arrays.deepToString(out).replaceAll("], \\[", "],\n ["));
+        return out;
     }
 
     public double[][] computeMDS() {

@@ -2,10 +2,7 @@ package dev.ryanramsdell.data;
 
 import dev.ryanramsdell.enums.StitchType;
 
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.StringJoiner;
+import java.util.*;
 
 public class Stitch {
     private final StitchType type;
@@ -68,6 +65,19 @@ public class Stitch {
 
     public Set<Stitch> getChildren() {
         return this.children;
+    }
+
+    public Set<Stitch> getNeighbors() {
+        Stitch pred = this.getPredecessor();
+        Stitch succ = this.getSuccessor();
+        Set<Stitch> children = this.getChildren();
+        Set<Stitch> parents = this.getParents();
+        Set<Stitch> neighbors = new HashSet<>();
+        if (children != null) neighbors.addAll(children);
+        if (parents != null) neighbors.addAll(parents);
+        if (pred != null) neighbors.add(pred);
+        if (succ != null) neighbors.add(succ);
+        return neighbors;
     }
 
     public void setVertex(Point vertex) {

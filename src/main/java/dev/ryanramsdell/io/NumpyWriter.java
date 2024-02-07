@@ -10,11 +10,16 @@ import java.util.Arrays;
 
 public class NumpyWriter {
     KnittingPattern pattern;
+    DissimilarityAlgorithm dissimilarityAlgorithm = DissimilarityAlgorithm.DEFAULT;
     public NumpyWriter(KnittingPattern pattern) {
         this.pattern = pattern;
     }
+    public NumpyWriter(KnittingPattern pattern, DissimilarityAlgorithm dissimilarityAlgorithm) {
+        this.pattern = pattern;
+        this.dissimilarityAlgorithm = dissimilarityAlgorithm;
+    }
     public void writeToFile(String filename) {
-        double[][] diss = pattern.computeDissimilarity(DissimilarityAlgorithm.DISS_BFS);
+        double[][] diss = pattern.computeDissimilarity(DissimilarityAlgorithm.DIJKSTRAS);
         StringBuilder sb = new StringBuilder("import numpy as np\n");
         sb.append("stitches = np.array(");
         sb.append(Arrays.deepToString(diss).replace("], ", "],\n"));
@@ -33,5 +38,9 @@ public class NumpyWriter {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void setDissimilarityAlgorithm(DissimilarityAlgorithm dissimilarityAlgorithm) {
+        this.dissimilarityAlgorithm = dissimilarityAlgorithm;
     }
 }
