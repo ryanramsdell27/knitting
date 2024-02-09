@@ -24,13 +24,15 @@ public interface KPattern {
      */
     Stitch basicStitch(StitchType type);
     /**
-     * Perform a single knit stitch
+     * Perform a decrease that combines num stitches together
+     * @param type StitchType of the new stitch
+     * @param num number of parent stitches to combine
      */
     void decrease(StitchType type, int num, DecreaseType decreaseType);
     /**
      * Perform an increase of num stitches
-     * @param type StitchType of the new type
-     * @param num number of parent stitches to combine
+     * @param type StitchType of the new stitch
+     * @param num number of new stitches to create
      */
     void increase(StitchType type, int num, IncreaseType increaseType);
 
