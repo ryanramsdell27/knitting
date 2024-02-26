@@ -15,7 +15,7 @@ public class Main {
     public static void main(String[] args) {
         KnittingPattern pattern;
         String patternString = "co40 (k3 m1:(right) k10)10 (k2tog:(left) k3 k2tog)16";
-        int x = 50;
+        int x = 10;
         patternString = String.format("co%d (k%d)%d (k2tog k5)%d", x, x, x/2, x-2);
         Reader reader = new StringReader(patternString);
         Knit knit = new Knit(reader);

@@ -172,7 +172,7 @@ public class KnittingPattern implements KPattern {
         double[][] out = new double [count][count];
         for(Stitch stitch : stitches) {
             double[] dis = new double[count];
-            BFS(stitch, dis, count);
+            BFS(stitch, dis, Math.min(20, count));
             out[stitch.getOrderId()] = dis;
 //            out[stitch.getOrderId()][stitch.getOrderId()] = 0.0;
         }

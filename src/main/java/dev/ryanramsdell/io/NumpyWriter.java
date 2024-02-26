@@ -19,7 +19,7 @@ public class NumpyWriter {
         this.dissimilarityAlgorithm = dissimilarityAlgorithm;
     }
     public void writeToFile(String filename) {
-        double[][] diss = pattern.computeDissimilarity(DissimilarityAlgorithm.DIJKSTRAS);
+        double[][] diss = pattern.computeDissimilarity(this.dissimilarityAlgorithm);
         StringBuilder sb = new StringBuilder("import numpy as np\n");
         sb.append("stitches = np.array(");
         sb.append(Arrays.deepToString(diss).replace("], ", "],\n"));
