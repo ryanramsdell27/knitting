@@ -1,6 +1,8 @@
 # Knitting Tools
 This project aims to be a collection of tools for testing and analyzing knitting patterns.
 
+See my [blog post](https://blog.ryanramsdell.dev/programming/knitting/index.html) for a more in-depth review
+
 ## Grammar and Parsing
 The grammar defined here is designed to be similar to what is used in existing knitting patterns. The parser generated to match the specification of this grammar is then able to convert a written pattern into some code representation during the interpretation phase.
 
